@@ -12,3 +12,4 @@ me604:
     type: effort_controllers/JointPositionController
     joint: joint2
     pid: {p: 100.0, i: 0.01, d: 10.0}
+    

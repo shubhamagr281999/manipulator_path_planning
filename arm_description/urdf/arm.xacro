@@ -3,13 +3,11 @@
 <robot name="me604" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Constants for robot dimensions -->
- <xacro:property name="PI" value="3.1415926535897931"/>
-  <xacro:property name="mass" value="1" /> <!-- arbitrary value for mass -->
-  <xacro:property name="width" value="0.05" /> <!-- Square dimensions (widthxwidth) of beams -->
-  <xacro:property name="height1" value="0.1" /> <!-- Link 0 -->
-  <xacro:property name="length1" value="0.6" /> <!-- Link 2 -->
-  <xacro:property name="length2" value="0.6" /> <!-- Link 3 -->
-  <xacro:property name="camera_link" value="0.05" /> <!-- Size of square 'camera' box -->
+  <xacro:property name="mass" value="1"      /> <!-- arbitrary value for mass -->
+  <xacro:property name="width" value="0.05"  /> <!-- Square dimensions (widthxwidth) of beams -->
+  <xacro:property name="height1" value="0.5" /> <!-- Link 0 -->
+  <xacro:property name="length1" value="1" /> <!-- Link 1 -->
+  <xacro:property name="length2" value="1" /> <!-- Link 2s -->
 
   <xacro:include filename="$(find arm_description)/urdf/arm.gazebo" />
   <xacro:include filename="$(find arm_description)/urdf/materials.xacro" />
@@ -23,13 +21,11 @@
   </joint>
     
   <!-- Base Link -->
-  <xacro:link0 name="link0" height1="${height1}" width="${width}" mass="${mass/6}" />
+  <xacro:link0 name="link0" height1="${height1}" width="${width}" mass="${mass/6}"/>
   <!-- Links of the manipulator -->
   <xacro:link_arm name="link1" length="${length1}" width="${width}" mass="${mass}"/>
   <xacro:link_arm name="link2" length="${length2}" width="${width}" mass="${mass}"/>
-  <!-- laser scan link -->
-  <xacro:link0 name="hokuyo_link" height1="${height1/2}" width="${width}" mass="${mass/12}" />
-
+ 
   <!-- Joints of the manipulator -->
   <joint name="joint1" type="continuous">
     <parent link="link0"/>
@@ -42,16 +38,9 @@
    <joint name="joint2" type="continuous">
     <parent link="link1"/>
     <child link="link2"/>
-    <origin xyz="0 ${length1 - 0.05} ${width+0.01}" rpy="0 0 0"/>
+    <origin xyz="0 ${length1 - 0.025} ${-width-0.01}" rpy="0 0 0"/>
     <axis xyz="0 0 1"/>
     <dynamics damping="0.7"/>
-  </joint>
-
-  <joint name="hokuyo_joint" type="fixed">
-    <axis xyz="0 0 1" />
-    <parent link="link2" />
-    <child link="hokuyo_link" />
-    <origin xyz="0 ${length2} ${width/2}" rpy="0 0 0" />
   </joint>
 
   <transmission name="tran1">
@@ -76,4 +65,55 @@
     </actuator>
   </transmission>
 
+
+   <joint name="hokuyo_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.0 0.0 ${height1 + width +0.1}"/>
+    <parent link="link0"/>
+    <child link="hokuyo_link"/>
+  </joint>
+
+  <joint name="hokoyu_joint2" type="fixed">
+    <parent link="link1"/>
+    <child link="hokuyo_frame"/>
+    <origin xyz="0 ${length1 - 0.025} ${-2*width-0.03}" rpy="0 0 0"/>
+  </joint>
+
+  <link name="hokuyo_link">
+    <inertial>
+      <mass value="0.270"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hector_sensors_description/meshes/hokuyo_utm30lx/hokuyo_utm_30lx.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.0115"/>
+      <geometry>
+        <box size="0.058 0.058 0.087"/>
+      </geometry>
+    </collision>
+  </link>
+  <link name="hokuyo_frame">
+    <inertial>
+      <mass value="0.270"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hector_sensors_description/meshes/hokuyo_utm30lx/hokuyo_utm_30lx.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 -0.0115"/>
+      <geometry>
+        <box size="0.058 0.058 0.087"/>
+      </geometry>
+    </collision>
+  </link>    
 </robot>
