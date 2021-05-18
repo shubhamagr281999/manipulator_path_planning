@@ -4,3 +4,6 @@ upper_angle_limit_config : 6.0
 number_of_sampling_point : 200
 upper_limit_distance : 0.5
 lower_limit_distance : 0.1
+number_of_point_local_planner : 0.1
+link_lengths : [1,1]
+link_offsets : [0,0.025]

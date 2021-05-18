@@ -16,7 +16,7 @@ from drdo_exploration.msg import direction
 #from geometry_msgs import PoseStamped
 class navigation:
     def __init__(self):
-        self.rate=rospy.Rate(10)
+        self.rate=rospy.Rate(0.1)
         self.x_pose=0.0
         self.y_pose=0.0
         self.z_pose=0.0
@@ -31,21 +31,30 @@ class navigation:
         # self.sub1=rospy.Subscriber("/mavros/global_position/local",Odometry, self.gps_data_callback)
         # self.subl2=rospy.Subscriber("/drone/teleop",teleopData,self.decision_calback)
         self.subl3=rospy.Subscriber("chatter",direction,self.test_callback,queue_size=1)
+        self.subl31=rospy.Subscriber("chatter1",direction,self.test_callback1,queue_size=1)
         self.pub_test=rospy.Publisher('chatter',direction,queue_size=10)
+        self.pub_test1=rospy.Publisher('chatter1',direction,queue_size=10)
+
         self.msgp=PoseStamped()
     def test_callback(self,msg):
         print("I heard:",msg.vec_x[1])
+        rospy.sleep(0.5)
+    def test_callback1(self,msg):
+        print("I heard in 1:",msg.vec_x[2])
         rospy.sleep(0.5)
     def nav(self):
         while not rospy.is_shutdown():            
             pub_config=[]
             pub_config.append(1.0)
-            pub_config.append(3.0)
+            pub_config.append(5.0)
             pub_config.append(2.0)
             self.msg_test.vec_x=pub_config
             self.pub_test.publish(self.msg_test)
-            # print('I published:' , self.i)
+            self.pub_test1.publish(self.msg_test)
+            print('I published:' , self.i)
             self.rate.sleep()
+            for i in range(20):
+                print("main loop:", i)
 
         
 
