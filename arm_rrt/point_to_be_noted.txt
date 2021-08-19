@@ -1,0 +1,9 @@
+# list of all points has to be global
+# dof has to be global and read from param list if possible
+# for now 0 and 2pi has not been connected
+# global variable lower dist and upper dist criteria and this will be added in dist finction itself
+# max number of points also to be in param and global   number_of_point
+# global list has config as an attribute which is the point in config space
+
+# you might create lower and upper limit of config angle
+#need to introduce dealy

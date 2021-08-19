@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<robot name="me604" xmlns:xacro="https://www.ros.org/wiki/xacro" >
+<!-- 	Link 0 that is support to raise the arm above groun -->	
+	<xacro:macro name="link0" params="name height1 width mass">
+		<link name="${name}">
+    	<collision>
+      		<origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      		<geometry>
+ 	  		<box size="${width} ${width} ${height1}"/>
+      		</geometry>
+    	</collision>
+    	<visual>
+      		<origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      		<geometry>
+ 	 			<box size="${width} ${width} ${height1}"/>
+      		</geometry>
+      		<material name="Black"/>
+   	 	</visual>
+    	<inertial>
+      		<origin xyz="0 0 ${height1/2}" rpy="0 0 0"/>
+      		<mass value="${mass}"/>
+      		<inertia
+    		ixx="${mass / 12.0 * (width*width + height1*height1)}" ixy="0.0" ixz="0.0"
+    		iyy="${mass / 12.0 * (height1*height1 + width*width)}" iyz="0.0"
+    		izz="${mass / 12.0 * (width*width + width*width)}"/>
+    	</inertial>
+  		</link>
+	</xacro:macro>
+
+
+	<xacro:macro name="link_arm" params="name length width mass">
+		<link name="${name}">
+    		<collision>
+      			<origin xyz="0 ${length/2} 0" rpy="0 0 0"/>
+      			<geometry>
+					<box size="${width} ${length} ${width}"/>
+      			</geometry>
+    		</collision>
+
+    		<visual>
+       			<origin xyz="0 ${length/2} 0" rpy="0 0 0"/>
+      			<geometry>
+  					<box size="${width} ${length} ${width}"/>
+      			</geometry>
+      			<material name="orange"/>
+    		</visual>
+
+    		<inertial>
+      			<origin xyz="0 ${length/2} 0" rpy="0 0 0"/>
+      			<mass value="${mass}"/>
+      			<inertia
+	  			ixx="${mass / 12.0 * (width*width + length*length)}" ixy="0.0" ixz="0.0"
+	  			izz="${mass / 12.0 * (length*length + width*width)}" iyz="0.0"
+	  			iyy="${mass / 12.0 * (width*width + width*width)}"/>
+    		</inertial>
+  		</link>
+    </xacro:macro>
+</robot>
